@@ -11,6 +11,11 @@ by providing host and port.
 Initially a thing for the main zone will be created. This will trigger a zone
 detection internally and all available additional zones will appear as new things.
 
+If your receiver is using menu-based net radio navigation, you can use this binding to
+select radio stations from a configured menu.
+
+TODO: New features like presets, menu navigation and play info/control have to be added to this readme!
+
 ## Features
 
 The implemented channels are:
@@ -35,7 +40,6 @@ Items:
      Switch Yamaha_Mute             "Mute [%s]"            
      String Yamaha_Input         "Input [%s]"              
      String Yamaha_Surround         "surround [%s]"        
-     Number Yamaha_NetRadio  "Net Radio" <netRadio> 
 ```
 	 
 ### Manually linking
@@ -57,6 +61,7 @@ Sitemap:
 
 ```
      Selection item=Yamaha_NetRadio label="Sender" mappings=[1="N Joy", 2="Radio Sport", 3="RDU", 4="91ZM", 5="Hauraki"]
+     Selection item=Yamaha_NetRadioStation label="Sender" mappings=["N Joy"="N Joy", "Radio Sport"="Radio Sport", "RDU"="RDU","91ZM" ="91ZM", "Hauraki"="Hauraki"]
      Selection item=Yamaha_Input mappings=[HDMI1="BlueRay",HDMI2="Satellite","NET RADIO"="NetRadio",TUNER="Tuner"]
      Selection item=Yamaha_Surround label="Surround Mode" mappings=["2ch Stereo"="2ch","7ch Stereo"="7ch"]
 ```

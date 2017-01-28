@@ -8,11 +8,11 @@
  */
 package org.openhab.binding.yamahareceiver.discovery;
 
-import static org.openhab.binding.yamahareceiver.YamahaReceiverBindingConstants.THING_TYPE_YAMAHAAV;
-
-import java.util.Collections;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
@@ -21,17 +21,23 @@ import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
 import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.yamahareceiver.YamahaReceiverBindingConstants;
-import org.openhab.binding.yamahareceiver.internal.YamahaReceiverState;
-import org.openhab.binding.yamahareceiver.internal.protocol.YamahaReceiverCommunication.Zone;
+import org.openhab.binding.yamahareceiver.internal.protocol.SystemControl;
+import org.openhab.binding.yamahareceiver.internal.protocol.ZoneControl.Zone;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ZoneDiscoveryService extends AbstractDiscoveryService {
-
+    private Logger logger = LoggerFactory.getLogger(ZoneDiscoveryService.class);
     private ServiceRegistration<?> reg = null;
+    private final WeakReference<SystemControl.State> stateRef;
+    private final ThingUID bridge_uid;
 
-    public ZoneDiscoveryService() {
-        super(Collections.singleton(THING_TYPE_YAMAHAAV), 2, true);
+    public ZoneDiscoveryService(SystemControl.State state, ThingUID bridge_uid) {
+        super(YamahaReceiverBindingConstants.ZONE_THING_TYPES_UIDS, 2, true);
+        stateRef = new WeakReference<SystemControl.State>(state);
+        this.bridge_uid = bridge_uid;
     }
 
     public void stop() {
@@ -43,19 +49,30 @@ public class ZoneDiscoveryService extends AbstractDiscoveryService {
 
     @Override
     protected void startScan() {
+        detectZones();
     }
 
-    public void detectZones(YamahaReceiverState state, String base_udn) {
-        Map<String, Object> properties = new HashMap<>(3);
-        properties.put((String) YamahaReceiverBindingConstants.CONFIG_HOST_NAME, state.getHost());
+    public void detectZones() {
+        SystemControl.State info = stateRef.get();
+        if (info == null) {
+            stop();
+            logger.error("Lost state of AVR in zone discovery!");
+            return;
+        }
 
-        for (Zone zone : state.additional_zones) {
+        // Create a copy of the list to avoid concurrent modification exceptions, because
+        // the state update takes place in another thread
+        List<Zone> zone_copy = new ArrayList<Zone>(info.zones);
+
+        for (Zone zone : zone_copy) {
             String zoneName = zone.name();
-            ThingUID uid = new ThingUID(YamahaReceiverBindingConstants.THING_TYPE_YAMAHAAV, base_udn + zoneName);
+            ThingUID uid = new ThingUID(YamahaReceiverBindingConstants.ZONE_THING_TYPE, bridge_uid, zoneName);
 
-            properties.put((String) YamahaReceiverBindingConstants.CONFIG_ZONE, zoneName);
+            Map<String, Object> properties = new HashMap<>(3);
+            properties.put(YamahaReceiverBindingConstants.CONFIG_ZONE, zoneName);
+
             DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid).withProperties(properties)
-                    .withLabel(state.name + " " + zoneName).build();
+                    .withLabel(info.name + " " + zoneName).withBridge(bridge_uid).build();
             thingDiscovered(discoveryResult);
         }
     }
