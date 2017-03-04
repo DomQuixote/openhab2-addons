@@ -19,8 +19,6 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
-import org.eclipse.smarthome.core.types.State;
-import org.openhab.binding.network.service.InvalidConfigurationException;
 import org.openhab.binding.network.service.NetworkService;
 import org.openhab.binding.network.service.StateUpdate;
 import org.slf4j.Logger;
@@ -36,6 +34,9 @@ public class NetworkHandler extends BaseThingHandler implements StateUpdate {
     private Logger logger = LoggerFactory.getLogger(NetworkHandler.class);
     private NetworkService networkService;
 
+    private boolean lastKnownOnlineState = false;
+    private double lastKnownPingTime = 0;
+
     public NetworkHandler(Thing thing) {
         super(thing);
     }
@@ -50,20 +51,10 @@ public class NetworkHandler extends BaseThingHandler implements StateUpdate {
         if (command instanceof RefreshType) {
             switch (channelUID.getId()) {
                 case CHANNEL_ONLINE:
-                    try {
-                        State state = networkService.updateDeviceState() < 0 ? OnOffType.OFF : OnOffType.ON;
-                        updateState(CHANNEL_ONLINE, state);
-                    } catch (InvalidConfigurationException invalidConfigurationException) {
-                        updateStatus(ThingStatus.OFFLINE);
-                    }
+                    updateState(CHANNEL_ONLINE, lastKnownOnlineState ? OnOffType.ON : OnOffType.OFF);
                     break;
                 case CHANNEL_TIME:
-                    try {
-                        State state = new DecimalType(networkService.updateDeviceState());
-                        updateState(CHANNEL_TIME, state);
-                    } catch (InvalidConfigurationException invalidConfigurationException) {
-                        updateStatus(ThingStatus.OFFLINE);
-                    }
+                    updateState(CHANNEL_TIME, new DecimalType(lastKnownPingTime));
                     break;
                 default:
                     logger.debug("Command received for an unknown channel: {}", channelUID.getId());
@@ -76,10 +67,11 @@ public class NetworkHandler extends BaseThingHandler implements StateUpdate {
 
     @Override
     public void newState(double state) {
-        State onlineState = state < 0 ? OnOffType.OFF : OnOffType.ON;
-        State timeState = new DecimalType(state);
-        updateState(CHANNEL_ONLINE, onlineState);
-        updateState(CHANNEL_TIME, timeState);
+        lastKnownOnlineState = state >= 0;
+        lastKnownPingTime = state;
+
+        updateState(CHANNEL_ONLINE, lastKnownOnlineState ? OnOffType.ON : OnOffType.OFF);
+        updateState(CHANNEL_TIME, new DecimalType(lastKnownPingTime));
     }
 
     @Override
