@@ -32,8 +32,6 @@ public class YamahaReceiverBindingConstants {
     public final static Set<ThingTypeUID> BRIDGE_THING_TYPES_UIDS = Collections.singleton(BRIDGE_THING_TYPE);
     public static final Set<ThingTypeUID> ZONE_THING_TYPES_UIDS = Collections.singleton(ZONE_THING_TYPE);
 
-    public final static String DEFAULT_NET_RADIO_MENU_DIR = "Bookmarks/__My_Favorites";
-
     // List of channel IDs for zone control (except power which is also a non-zone/bridge channel)
     public final static String CHANNEL_POWER = "power";
     public final static String CHANNEL_INPUT = "input";

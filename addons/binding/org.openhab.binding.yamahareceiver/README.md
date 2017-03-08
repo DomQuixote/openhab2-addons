@@ -80,16 +80,11 @@ Items:
      Switch Yamaha_Mute             "Mute [%s]"            {channel="yamahareceiver:yamahaAV:9ab0c000_f668_11de_9976_00a0de88ee65:MAIN_ZONE:mute"}
      String Yamaha_Input         "Input [%s]"              {channel="yamahareceiver:yamahaAV:9ab0c000_f668_11de_9976_00a0de88ee65:MAIN_ZONE:input"}
      String Yamaha_Surround         "surround [%s]"        {channel="yamahareceiver:yamahaAV:9ab0c000_f668_11de_9976_00a0de88ee65:MAIN_ZONE:surroundProgram"}
-     Number Yamaha_NetRadio  "Net Radio" <netRadio>        {channel="yamahareceiver:yamahaAV:9ab0c000_f668_11de_9976_00a0de88ee65:MAIN_ZONE:netradiotune"}
 ```
  
 Sitemap:
 
 ```
-     Selection item=Yamaha_NetRadio label="Sender" mappings=[1="N Joy", 2="Radio Sport", 3="RDU", 4="91ZM", 5="Hauraki"]
-     Selection item=Yamaha_NetRadioStation label="Sender" mappings=["N Joy"="N Joy", "Radio Sport"="Radio Sport", "RDU"="RDU","91ZM" ="91ZM", "Hauraki"="Hauraki"]
-     Selection item=Yamaha_Input mappings=[HDMI1="BlueRay",HDMI2="Satellite","NET RADIO"="NetRadio",TUNER="Tuner"]
+     Selection item=Yamaha_Input mappings=[HDMI1="BlueRay",HDMI2="Satellite",NET_RADIO="NetRadio",TUNER="Tuner"]
      Selection item=Yamaha_Surround label="Surround Mode" mappings=["2ch Stereo"="2ch","7ch Stereo"="7ch"]
 ```
-	 
-Hint: The tricky thing are the `"` around `NET RADIO`, this Key (left from the equal sign) is a value that must be send to the receiver **with** the space inside. If you omit the `"` the binding sends only the `NET` and the receiver does nothing. Same are in surround definition!
