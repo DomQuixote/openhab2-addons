@@ -64,6 +64,9 @@ public class HttpXMLSendReceive {
 
     public HttpXMLSendReceive(String host) {
         this.host = host;
+        // Enable sniffing of the communication to the AVR if the logger level is set to trace
+        // when the addon is being loaded.
+        setProtocolSnifferEnable(logger.isTraceEnabled());
     }
 
     public void setHost(String host) {

@@ -36,7 +36,6 @@ import com.google.common.collect.Sets;
  * {@link InputWithPlayControl.PlayControlState} instead.
  *
  * @author David Graeff
- * @since 2.0
  */
 public class InputWithPlayControl {
     protected final WeakReference<HttpXMLSendReceive> com_ref;

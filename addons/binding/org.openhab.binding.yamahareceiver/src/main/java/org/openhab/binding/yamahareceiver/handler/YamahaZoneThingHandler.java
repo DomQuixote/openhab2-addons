@@ -152,9 +152,9 @@ public class YamahaZoneThingHandler extends BaseThingHandler
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, e.getMessage());
                 return;
             } catch (ParserConfigurationException e) {
-                e.printStackTrace();
+                logger.error(e.getLocalizedMessage());
             } catch (SAXException e) {
-                e.printStackTrace();
+                logger.error(e.getLocalizedMessage());
             }
         }
 
@@ -335,9 +335,9 @@ public class YamahaZoneThingHandler extends BaseThingHandler
         } catch (IOException e) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.getMessage());
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         } catch (SAXException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
     }
 
@@ -413,9 +413,9 @@ public class YamahaZoneThingHandler extends BaseThingHandler
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.getMessage());
             return;
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         } catch (SAXException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
     }
 

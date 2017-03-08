@@ -25,7 +25,6 @@ import org.xml.sax.SAXException;
  * No state will be saved in here, but in {@link SystemControl.State} instead.
  *
  * @author David Gräff <david.graeff@tu-dortmund.de>
- * @since 2.1
  */
 public class SystemControl {
     /**

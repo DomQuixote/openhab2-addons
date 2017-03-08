@@ -14,18 +14,44 @@ detection internally and all available additional zones will appear as new thing
 If your receiver is using menu-based net radio navigation, you can use this binding to
 select radio stations from a configured menu.
 
-TODO: New features like presets, menu navigation and play info/control have to be added to this readme!
-
 ## Features
 
-The implemented channels are:
+The implemented channels for the AVR thing are:
 
-* `power`: openHAB Type `Switch`, Switches The Receiver ON or OFF. Your receiver has to be in network standby for this to work.
-* `mute`: openHAB Type `Switch`, Mute or Unmute the receiver.
-* `volume`: openHAB Type `Dimmer`, Set's the receivers Volume percent Value.
-* `input`: openHAB Type `String`, Set's the input selection, depends on your receiver's real inputs. Examples: HDMI1, HDMI2, AV4, TUNER, NET RADIO, etc.
-* `surroundProgram`: openHAB Type `String`, Set's the surround mode. Examples: 2ch Stereo, 7ch Stereo, Hall in Munic, Straight, Surround Decoder.
- 
+* `power`: openHAB Type `Switch`, Switches the AVR ON or OFF. Your receiver has to be in network standby for this to work.
+
+The implemented channels for a zone thing are grouped in three groups.
+
+Zone control channels are:
+
+* `power#zone_channels`: openHAB Type `Switch`, Switches the zone ON or OFF. Your receiver has to be in network standby for this to work.
+* `mute#zone_channels`: openHAB Type `Switch`, Mute or Unmute the receiver.
+* `volume#zone_channels`: openHAB Type `Dimmer`, Set's the receivers volume as percentage.
+* `volumeDB#zone_channels`: openHAB Type `Dimmer`, Set's the receivers volume in dB.
+* `input#zone_channels`: openHAB Type `String`, Set's the input selection, depends on your receiver's real inputs. Examples: HDMI1, HDMI2, AV4, TUNER, NET RADIO, etc.
+* `surroundProgram#zone_channels`: openHAB Type `String`, Set's the surround mode. Examples: 2ch Stereo, 7ch Stereo, Hall in Munic, Straight, Surround Decoder.
+
+Playback control channels are:
+
+* `preset#playback_channels`: Set a preset.
+* `playback#playback_channels`: Set a play mode or get the current play mode.
+* `playback_station#playback_channels`: Get the current played station (radio).
+* `playback_artist#playback_channels`: Get the current played artist.
+* `playback_album#playback_channels`: Get the current played album.
+* `playback_song#playback_channels`: Get the current played song.
+            
+Navigation control channels are:
+
+* `navigation_menu#navigation_channels`:  Select or display the full or relative path to an item.
+* `navigation_current_item#navigation_channels`:  Get the current item of the current menu.
+* `navigation_total_items#navigation_channels`:  Get the total count items in the current menu.
+* `navigation_level#navigation_channels`:  Get the current menu level.
+* `navigation_updown#navigation_channels`:  Move the cursor up or down.
+* `navigation_leftright#navigation_channels`: Move the cursor to the left or right.
+* `navigation_select#navigation_channels`:  Select the current item.
+* `navigation_back#navigation_channels`:  Navigate to the parent menu.
+* `navigation_backtoroot#navigation_channels`:  Navigate back to the root menu.
+
 ## Example
 
 ### For auto linking with Paper UI. 

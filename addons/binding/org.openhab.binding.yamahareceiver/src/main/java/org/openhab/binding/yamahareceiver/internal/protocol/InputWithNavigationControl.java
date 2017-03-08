@@ -37,9 +37,8 @@ import com.google.common.collect.Sets;
  * menu.goToPath(menuDir);
  * menu.selectItem(stationName);
  *
- * @author Dennis Frommknecht
- * @author David Graeff
- * @since 2.0.0
+ * @author David Graeff - Completely refactored class
+ * @author Dennis Frommknecht - Initial idea and implementaton
  */
 public class InputWithNavigationControl {
     protected final WeakReference<HttpXMLSendReceive> com_ref;

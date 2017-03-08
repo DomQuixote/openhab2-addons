@@ -30,7 +30,6 @@ import org.xml.sax.SAXException;
  * @author David Gräff <david.graeff@tu-dortmund.de>
  * @author Eric Thill
  * @author Ben Jones
- * @since 2.0
  */
 public class ZoneControl {
     /**

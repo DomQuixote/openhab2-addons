@@ -1,4 +1,5 @@
 # Yamahareceiver Binding - Developer documentation
+
 An overview is presented with the following diagram:
 ![Class Diagram](doc/classes.png "Class Diagram")
 
@@ -22,12 +23,14 @@ and used in createCommunicationObject() Main_Zone thing handler.
 For every other zone a discovery result will be generated and can be added by the user.
 
 ## Protocol
+
 There exist two protocols so far. An xml based one for the following receiver types:
 RX-A3010,RX-A2010,RX-A1010,RX-A810,RX-A710,RX-V3071,RX-V2071,RX-V1071,RX-V871,RX-V771,RX-V671,
 and a json based protocol for newer reeivers. At the moment there exists only an implementation
 for the xml based protocol.
 
 ### XML protocol overview
+
 The http port 80 on the receiver is used with http POST requests for retrieving and changing the device state. The actual url is http://HOST/YamahaRemoteControl/ctrl.
 
 An example for retrieving data:
@@ -165,7 +168,3 @@ An example for changing the state of the receiver:
 		Play_Info
 		List_Control
 		List_Info
-
-
-## Authors
- * David Gräff <david.graeff@tu-dortmund.de>, 2016-2017

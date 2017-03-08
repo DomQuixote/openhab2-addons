@@ -83,8 +83,6 @@ public class YamahaReceiverBindingConstants {
     public static final String CONFIG_HOST_NAME = "HOST";
     public static final String CONFIG_ZONE = "ZONE";
     public static final String CONFIG_RELVOLUMECHANGE = "RELVOLUMECHANGE";
-    public static final String CONFIG_TRACE_LOG = "TRACE_LOG";
-    // public static final String CONFIG_NETRADIOMENU = "NETRADIOMENU";
 
     public static final String PROPERTY_VERSION = "version";
     public static final String PROPERTY_ASSIGNED_NAME = "assigned_name";

@@ -109,22 +109,18 @@ public class YamahaBridgeHandler extends BaseBridgeHandler {
     /**
      * Sets up a refresh timer (using the scheduler) with the CONFIG_REFRESH interval.
      *
-     * @param initial_wait_time The delay before the first refresh. Maybe 0 to immediately
+     * @param initialWaitTime The delay before the first refresh. Maybe 0 to immediately
      *            initiate a refresh.
      */
-    private void setupRefreshTimer(int initial_wait_time) {
+    private void setupRefreshTimer(int initialWaitTime) {
         if (state == null) {
             return;
         }
 
-        Object interval_config_o = thing.getConfiguration().get(YamahaReceiverBindingConstants.CONFIG_REFRESH);
-        Integer interval_config;
-
-        if (interval_config_o == null) {
-            interval_config = refrehInterval;
-        } else {
-            interval_config = interval_config_o instanceof Integer ? (Integer) interval_config_o
-                    : ((BigDecimal) interval_config_o).intValue();
+        BigDecimal intervalConfig = (BigDecimal) thing.getConfiguration()
+                .get(YamahaReceiverBindingConstants.CONFIG_REFRESH);
+        if (intervalConfig != null && intervalConfig.intValue() != refrehInterval) {
+            refrehInterval = intervalConfig.intValue();
         }
 
         if (refreshTimer != null) {
@@ -135,9 +131,7 @@ public class YamahaBridgeHandler extends BaseBridgeHandler {
             public void run() {
                 updateAllZoneInformation();
             }
-        }, initial_wait_time, interval_config, TimeUnit.SECONDS);
-
-        refrehInterval = interval_config;
+        }, initialWaitTime, refrehInterval, TimeUnit.SECONDS);
     }
 
     /**
@@ -157,9 +151,9 @@ public class YamahaBridgeHandler extends BaseBridgeHandler {
             state.invalidate();
             return;
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         } catch (SAXException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
 
         Bridge bridge = (Bridge) thing;
@@ -194,16 +188,16 @@ public class YamahaBridgeHandler extends BaseBridgeHandler {
         updateConfiguration(configuration);
 
         // Check if host configuration has changed
-        String host_config = (String) thing.getConfiguration().get(YamahaReceiverBindingConstants.CONFIG_HOST_NAME);
-        if (host_config != null) {
-            xml.setHost(host_config);
+        String hostConfig = (String) thing.getConfiguration().get(YamahaReceiverBindingConstants.CONFIG_HOST_NAME);
+        if (hostConfig != null) {
+            xml.setHost(hostConfig);
         }
 
         // Check if refresh configuration has changed
-        BigDecimal interval_config = (BigDecimal) thing.getConfiguration()
+        BigDecimal intervalConfig = (BigDecimal) thing.getConfiguration()
                 .get(YamahaReceiverBindingConstants.CONFIG_REFRESH);
-        if (interval_config != null && interval_config.intValue() != refrehInterval) {
-            setupRefreshTimer(interval_config.intValue());
+        if (intervalConfig != null && intervalConfig.intValue() != refrehInterval) {
+            setupRefreshTimer(intervalConfig.intValue());
         }
 
         // Read the configuration for the relative volume change factor.
@@ -213,12 +207,6 @@ public class YamahaBridgeHandler extends BaseBridgeHandler {
             relativeVolumeChangeFactor = relVolumeChange.floatValue();
         } else {
             relativeVolumeChangeFactor = 0.5f;
-        }
-
-        Boolean configTraceLog = (Boolean) thing.getConfiguration()
-                .get(YamahaReceiverBindingConstants.CONFIG_TRACE_LOG);
-        if (configTraceLog != null) {
-            xml.setProtocolSnifferEnable(configTraceLog);
         }
     }
 
@@ -250,12 +238,6 @@ public class YamahaBridgeHandler extends BaseBridgeHandler {
         }
 
         xml = new HttpXMLSendReceive(host);
-
-        Boolean configTraceLog = (Boolean) thing.getConfiguration()
-                .get(YamahaReceiverBindingConstants.CONFIG_TRACE_LOG);
-        if (configTraceLog != null) {
-            xml.setProtocolSnifferEnable(configTraceLog);
-        }
 
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_PENDING, "Waiting for data");
         setupRefreshTimer(0);
